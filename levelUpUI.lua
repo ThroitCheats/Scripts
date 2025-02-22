@@ -5,6 +5,7 @@ local textservice = game:GetService("TextService")
 local tweenservice = game:GetService("TweenService")
 local guiservice = game:GetService("GuiService")
 local coregui = game:GetService("CoreGui")
+local uis = game:GetService("UserInputService")
 
 local library = {
     settings = {
@@ -2490,7 +2491,7 @@ function library:create(title)
 	end)
 
 	self.gui.main.top.close.MouseButton1Click:Connect(function()
-		self.dir:Destroy()
+		library.gui.main.Visible = not library.gui.main.Visible
 	end)
    
 	self.gui.main.top.search.input:GetPropertyChangedSignal("Text"):Connect(function()
@@ -2994,5 +2995,10 @@ function library:addsettings()
     uiSettings:addslider({ min=1,max=15, title = "Rainbow Speed", flag = "rainbowSpeed", suffix = "", callback = function(x)rainbowSpeed = 16-x end })
     return settings
 end
+uis.InputBegan:Connect(function(input, gameProcessed)
+	if input.KeyCode.Name == "RightShift" then 
+        library.gui.main.Visible = not library.gui.main.Visible
+	end
+end)  
 
 return library
