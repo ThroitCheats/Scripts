@@ -2446,7 +2446,7 @@ function library:create(title)
 					Font = Enum.Font.GothamMedium, 
 					FontSize = Enum.FontSize.Size14, 
 					RichText = true, 
-					Text = "V5.0.0", 
+					Text = "Version 0.5", 
 					TextColor3 = Color3.new(0.882353, 0.882353, 0.882353), 
 					TextSize = 13, 
 					TextStrokeColor3 = Color3.new(0.0823529, 0.0823529, 0.0823529), 
