@@ -514,7 +514,9 @@ end
 
 function InstanceObject:Destruct()
 	self.renderConnection:Disconnect();
-	self.text:Remove();
+	if self.text and self.text.Remove then 
+    	self.text:Remove();
+    end
 end
 
 function InstanceObject:Render()
