@@ -5,8 +5,7 @@ local workspace = game:GetService("Workspace");
 
 -- variables
 local localPlayer = players.LocalPlayer;
-local camera;
-repeat camera = workspace.CurrentCamera; wait() until camera
+local camera = workspace.CurrentCamera;
 local viewportSize = camera.ViewportSize;
 local container = Instance.new("Folder",workspace)
 
