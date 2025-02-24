@@ -270,7 +270,7 @@ function EspObject:Render()
 			enabled = false
 		end
 	end
-	if not onScreen then 
+	if (not onScreen) or (not enabled) then 
 	    hidden.arrow.Visible = enabled and (not onScreen) and options.offScreenArrow;
     	hidden.arrowOutline.Visible = hidden.arrow.Visible and options.offScreenArrowOutline;
     	if hidden.arrow.Visible and self.direction then
@@ -288,7 +288,7 @@ function EspObject:Render()
     		arrowOutline.Color = parseColor(self, options.offScreenArrowOutlineColor[1], true);
     		arrowOutline.Transparency = options.offScreenArrowOutlineColor[2];
     	end
-	else 
+	else
     	visible.box.Visible = enabled and onScreen and options.box;
     	visible.boxOutline.Visible = visible.box.Visible and options.boxOutline;
     	if visible.box.Visible then
