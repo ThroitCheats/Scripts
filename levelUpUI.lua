@@ -2916,6 +2916,7 @@ function library:loadconfig(name)
                 if item ~= nil then
                     task.spawn(function()
                         if item.class == "picker" then
+							print('e')
                             item:toggle(v.rainbow)
                             if item.setToggle then 
                                 item:setToggle(v.toggled)
