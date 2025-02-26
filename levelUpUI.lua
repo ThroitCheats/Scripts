@@ -2916,12 +2916,11 @@ function library:loadconfig(name)
                 if item ~= nil then
                     task.spawn(function()
                         if item.class == "picker" then
-							print('e')
                             item:toggle(v.rainbow)
                             if item.setToggle then 
                                 item:setToggle(v.toggled)
                             end
-                            item:set(hextocolour(v.colour))
+                            item:set(hextocolour(v.colour) or Color3.fromRGB(255,255,254))
                         else
                             item:set(v)
                         end
