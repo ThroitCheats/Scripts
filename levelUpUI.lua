@@ -26,7 +26,7 @@ local library = {
 local player = game:GetService("Players").LocalPlayer
 local mouse = player:GetMouse()
 local camera = workspace.CurrentCamera
-
+local viewPortSize = camera.ViewportSize
 --[[ Functions ]]--
 
 local function create(class, properties, children)
@@ -2487,7 +2487,7 @@ function library:create(title)
 
 	self.gui.main.top.hide.MouseButton1Click:Connect(function()
 		self.settings.open = not self.settings.open
-		tween(self.gui.main, 0.25, { Position = self.settings.open and UDim2.new(0, 75, 0, 150) or UDim2.new(0, self.gui.main.AbsolutePosition.X, 0, camera.ViewportSize.Y - (56 + guiservice:GetGuiInset().Y)) })
+		tween(self.gui.main, 0.25, { Position = self.settings.open and UDim2.new(0, 75, 0, 150) or UDim2.new(0, self.gui.main.AbsolutePosition.X, 0, viewPortSize.Y - (56 + guiservice:GetGuiInset().Y)) })
 	end)
 
 	self.gui.main.top.close.MouseButton1Click:Connect(function()
