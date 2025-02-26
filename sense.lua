@@ -270,9 +270,47 @@ function EspObject:Render()
 			enabled = false
 		end
 	end
+	visible.box.Visible = enabled and onScreen and options.box;
+    hidden.arrow.Visible = enabled and (not onScreen) and options.offScreenArrow;
+	hidden.arrowOutline.Visible = hidden.arrow.Visible and options.offScreenArrowOutline;
+	visible.boxOutline.Visible = visible.box.Visible and options.boxOutline;
+    visible.boxFill.Visible = enabled and onScreen and options.boxFill;
+    visible.healthBar.Visible = enabled and onScreen and options.healthBar;
+	visible.healthBarOutline.Visible = visible.healthBar.Visible and options.healthBarOutline;
+	visible.healthText.Visible = enabled and onScreen and options.healthText;
+    visible.name.Visible = enabled and onScreen and options.name;
+	visible.distance.Visible = enabled and onScreen and self.distance and options.distance;
+	visible.weapon.Visible = enabled and onScreen and options.weapon;
+	visible.tracer.Visible = enabled and onScreen and options.tracer;
+	visible.tracerOutline.Visible = visible.tracer.Visible and options.tracerOutline;
+	
+	
+	local box3dEnabled = enabled and onScreen and options.box3d;
+	for i = 1, #box3d do
+		local face = box3d[i];
+		for i2 = 1, #face do
+			local line = face[i2];
+			line.Visible = box3dEnabled;
+			line.Color = parseColor(self, options.box3dColor[1]);
+			line.Transparency = options.box3dColor[2];
+		end
+
+		if box3dEnabled then
+			local line1 = face[1];
+			line1.From = corners.corners[i];
+			line1.To = corners.corners[i == 4 and 1 or i+1];
+
+			local line2 = face[2];
+			line2.From = corners.corners[i == 4 and 1 or i+1];
+			line2.To = corners.corners[i == 4 and 5 or i+5];
+
+			local line3 = face[3];
+			line3.From = corners.corners[i == 4 and 5 or i+5];
+			line3.To = corners.corners[i == 4 and 8 or i+4];
+		end
+	end
+	
 	if (not onScreen) or (not enabled) then 
-	    hidden.arrow.Visible = enabled and (not onScreen) and options.offScreenArrow;
-    	hidden.arrowOutline.Visible = hidden.arrow.Visible and options.offScreenArrowOutline;
     	if hidden.arrow.Visible and self.direction then
     		local arrow = hidden.arrow;
     		arrow.PointA = min2(max2(viewportSize*0.5 + self.direction*options.offScreenArrowRadius, Vector2.one*25), viewportSize - Vector2.one*25);
@@ -289,8 +327,6 @@ function EspObject:Render()
     		arrowOutline.Transparency = options.offScreenArrowOutlineColor[2];
     	end
 	else
-    	visible.box.Visible = enabled and onScreen and options.box;
-    	visible.boxOutline.Visible = visible.box.Visible and options.boxOutline;
     	if visible.box.Visible then
     		local box = visible.box;
     		box.Position = corners.topLeft;
@@ -305,7 +341,6 @@ function EspObject:Render()
     		boxOutline.Transparency = options.boxOutlineColor[2];
     	end
     
-    	visible.boxFill.Visible = enabled and onScreen and options.boxFill;
     	if visible.boxFill.Visible then
     		local boxFill = visible.boxFill;
     		boxFill.Position = corners.topLeft;
@@ -314,8 +349,7 @@ function EspObject:Render()
     		boxFill.Transparency = options.boxFillColor[2];
     	end
     
-    	visible.healthBar.Visible = enabled and onScreen and options.healthBar;
-    	visible.healthBarOutline.Visible = visible.healthBar.Visible and options.healthBarOutline;
+    	
     	if visible.healthBar.Visible then
     		local barFrom = corners.topLeft - HEALTH_BAR_OFFSET;
     		local barTo = corners.bottomLeft - HEALTH_BAR_OFFSET;
@@ -332,7 +366,6 @@ function EspObject:Render()
     		healthBarOutline.Transparency = options.healthBarOutlineColor[2];
     	end
     
-    	visible.healthText.Visible = enabled and onScreen and options.healthText;
     	if visible.healthText.Visible then
     		local barFrom = corners.topLeft - HEALTH_BAR_OFFSET;
     		local barTo = corners.bottomLeft - HEALTH_BAR_OFFSET;
@@ -348,7 +381,6 @@ function EspObject:Render()
     		healthText.Position = lerp2(barTo, barFrom, self.health/self.maxHealth) - healthText.TextBounds*0.5 - HEALTH_TEXT_OFFSET;
     	end
     
-    	visible.name.Visible = enabled and onScreen and options.name;
     	if visible.name.Visible then
     		local name = visible.name;
     		name.Size = interface.sharedSettings.textSize;
@@ -360,8 +392,7 @@ function EspObject:Render()
     		name.Position = (corners.topLeft + corners.topRight)*0.5 - Vector2.yAxis*name.TextBounds.Y - NAME_OFFSET;
     		name.Text = self.player.Name or "Player"
     	end
-    
-    	visible.distance.Visible = enabled and onScreen and self.distance and options.distance;
+
     	if visible.distance.Visible then
     		local distance = visible.distance;
     		distance.Text = round(self.distance) .. " studs";
@@ -374,7 +405,7 @@ function EspObject:Render()
     		distance.Position = (corners.bottomLeft + corners.bottomRight)*0.5 + DISTANCE_OFFSET;
     	end
     
-    	visible.weapon.Visible = enabled and onScreen and options.weapon;
+
     	if visible.weapon.Visible then
     		local weapon = visible.weapon;
     		weapon.Text = self.weapon;
@@ -388,9 +419,7 @@ function EspObject:Render()
     			(corners.bottomLeft + corners.bottomRight)*0.5 +
     			(visible.distance.Visible and DISTANCE_OFFSET + Vector2.yAxis*visible.distance.TextBounds.Y or Vector2.zero);
     	end
-    
-    	visible.tracer.Visible = enabled and onScreen and options.tracer;
-    	visible.tracerOutline.Visible = visible.tracer.Visible and options.tracerOutline;
+        	
     	if visible.tracer.Visible then
     		local tracer = visible.tracer;
     		tracer.Color = parseColor(self, options.tracerColor[1]);
@@ -409,30 +438,6 @@ function EspObject:Render()
     	end
         
     
-    	local box3dEnabled = enabled and onScreen and options.box3d;
-    	for i = 1, #box3d do
-    		local face = box3d[i];
-    		for i2 = 1, #face do
-    			local line = face[i2];
-    			line.Visible = box3dEnabled;
-    			line.Color = parseColor(self, options.box3dColor[1]);
-    			line.Transparency = options.box3dColor[2];
-    		end
-    
-    		if box3dEnabled then
-    			local line1 = face[1];
-    			line1.From = corners.corners[i];
-    			line1.To = corners.corners[i == 4 and 1 or i+1];
-    
-    			local line2 = face[2];
-    			line2.From = corners.corners[i == 4 and 1 or i+1];
-    			line2.To = corners.corners[i == 4 and 5 or i+5];
-    
-    			local line3 = face[3];
-    			line3.From = corners.corners[i == 4 and 5 or i+5];
-    			line3.To = corners.corners[i == 4 and 8 or i+4];
-    		end
-    	end
 	end
 	if DESTROY then 
 		self:Destruct()
