@@ -122,10 +122,12 @@ end
 
 function EspObject:_create(class, properties)
 	local drawing = Drawing.new(class);
-	for property, value in next, properties do
-		drawing[property] = value;
+	if drawing then 
+    	for property, value in next, properties do
+    		drawing[property] = value;
+    	end
+    	self.bin[#self.bin + 1] = drawing;
 	end
-	self.bin[#self.bin + 1] = drawing;
 	return drawing;
 end
 
