@@ -497,9 +497,7 @@ InstanceObject.__index = InstanceObject;
 
 function InstanceObject.new(instance, options)
 	local self = setmetatable({}, InstanceObject);
-	print('1')
 	self.instance = assert(instance, "Missing argument #1 (Instance Expected)");
-	print('2')
 	self.options = assert(options, "Missing argument #2 (table expected)");
 	self:Construct();
 	return self;
@@ -533,9 +531,7 @@ function InstanceObject:Destruct()
 end
 
 function InstanceObject:Render()
-	warn('1')
 	local instance = self.instance;
-	warn('2')
 	if not instance or not instance.Parent then
 		return self:Destruct();
 	end
