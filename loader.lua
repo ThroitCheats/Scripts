@@ -354,7 +354,8 @@ if autoGame then
     mainLabel.Text = "Level Up - "..autoGame.name 
     descriptionLabel.Text = autoGame.desc
 end
-
+local s,_ pcall(function()local editableImage = assetService:CreateEditableImage()end)
+if s then 
 local function getPNGLibrary()
     local libraryLink = "https://raw.githubusercontent.com/MaximumADHD/Roblox-PNG-Library/refs/heads/master/"
     local chunkLink = libraryLink.."Chunks/"
@@ -401,7 +402,7 @@ for y = 1, editableImage.Size.Y do
 end
 editableImage:WritePixelsBuffer(Vector2.zero, editableImage.Size, pixelsBuffer)
 gameImage.ImageContent = Content.fromObject(editableImage)
-
+end
 --#endregion 
 --#region UI functions 
 closeButton.MouseButton1Click:Connect(function()levelUpLoader:Destroy() end) 
