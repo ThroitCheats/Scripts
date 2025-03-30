@@ -354,7 +354,7 @@ if autoGame then
     mainLabel.Text = "Level Up - "..autoGame.name 
     descriptionLabel.Text = autoGame.desc
 end
-local s,_ pcall(function()local editableImage = assetService:CreateEditableImage()end)
+local s,_ = pcall(function()local editableImage = assetService:CreateEditableImage()end)
 if s then 
 local function getPNGLibrary()
     local libraryLink = "https://raw.githubusercontent.com/MaximumADHD/Roblox-PNG-Library/refs/heads/master/"
