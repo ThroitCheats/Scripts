@@ -232,6 +232,7 @@ keyBox.PlaceholderText = "Paste your key here"
 keyBox.Text = ""
 keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyBox.TextSize = 26.000
+keyBox.text = script_key or ""
 
 underline.Name = "underline"
 underline.Parent = keyBox
