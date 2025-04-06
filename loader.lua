@@ -1,3 +1,4 @@
+--loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()
 local httpService = game:GetService("HttpService")
 local assetService = game:GetService("AssetService")
 local placeId = game.PlaceId
@@ -14,14 +15,24 @@ local function loadTrident()
             game.CoreGui.levelUpLoader:Destroy()
         ]])
     elseif tostring(string.lower(fastflag)) == "true" then 
+
         script_key = getgenv().script_key
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b0de7c4d81201b8837309655e4de6db7.lua"))()
         levelUpLoader:Destroy()
     end
 end
+local function loadRivals()
+    local teleportScript = [[script_key = "]]..getgenv().script_key..[["; loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()]]
+    script_key = getgenv().script_key
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()
+    levelUpLoader:Destroy()
+    warn(teleportScript)
+    queueteleport(teleportScript)
+end
 
 local idToGame = {
-    [4620241901] = {name = "Trident v5", desc = "You may need to use Awp.gg in order to run this script, or a similarly strong executor. Report any bugs to the Discord!", load = loadTrident}
+    [4620241901] = {name = "Trident v5", desc = "You may need to use Awp.gg in order to run this script, or a similarly strong executor. Report any bugs to the Discord!", load = loadTrident},
+    [6035872082] = {name = "Rivals", desc = "This script is in beta, report any bugs to the Discord!", load = loadRivals}
 }
 
 -- #region UI
@@ -354,55 +365,56 @@ if autoGame then
     mainLabel.Text = "Level Up - "..autoGame.name 
     descriptionLabel.Text = autoGame.desc
 end
-local s,_ = pcall(function()local editableImage = assetService:CreateEditableImage()end)
-if s then 
-local function getPNGLibrary()
-    local libraryLink = "https://raw.githubusercontent.com/MaximumADHD/Roblox-PNG-Library/refs/heads/master/"
-    local chunkLink = libraryLink.."Chunks/"
-    local moduleLink = libraryLink.."Modules/"
-    local initScript = game:HttpGet(libraryLink.."init.lua")
-    local chuncks = {"IDAT", "IEND", "IHDR", "PLTE", "bKGD","cHRM","gAMA","sRGB","tEXt","tIME","tRNS"}
-    local modules = {"BinaryReader","Deflate","Unfilter"}
-    for i,v in pairs(chuncks) do writefile('pngLibrary\\Chuncks\\'..v..'.lua', game:HttpGet(chunkLink..v..'.lua')) end
-    for i,v in pairs(modules) do writefile('pngLibrary\\Modules\\'..v..'.lua', game:HttpGet(moduleLink..v..'.lua')) end
-    local initScript = game:HttpGet(libraryLink.."init.lua")
-    --Replacing library requires
-    local replaces = {
-        ["local chunks = script.Chunks"] = "",
-        ["local modules = script.Modules"] = "",
-        ["require%(modules.Deflate%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\Deflate.lua'))()",
-        ["require%(modules.Unfilter%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\Unfilter.lua'))()",
-        ["require%(modules.BinaryReader%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\BinaryReader.lua'))()",
-        ["local handler = "]="local handler = loadstring(readfile('".."pngLibrary\\\\Chuncks\\\\".."'..chunkType..'.lua'))() --",
-        ["handler = require%(handler%)"]=''
-    }
-    for i,v in pairs(replaces) do 
-    if not string.find(initScript,i) then warn(i) end
-        initScript = (string.gsub(initScript,i,v))
+local s,_ = pcall(function()
+    local editableImage = assetService:CreateEditableImage()
+    local function getPNGLibrary()
+        local libraryLink = "https://raw.githubusercontent.com/MaximumADHD/Roblox-PNG-Library/refs/heads/master/"
+        local chunkLink = libraryLink.."Chunks/"
+        local moduleLink = libraryLink.."Modules/"
+        local initScript = game:HttpGet(libraryLink.."init.lua")
+        local chuncks = {"IDAT", "IEND", "IHDR", "PLTE", "bKGD","cHRM","gAMA","sRGB","tEXt","tIME","tRNS"}
+        local modules = {"BinaryReader","Deflate","Unfilter"}
+        for i,v in pairs(chuncks) do writefile('pngLibrary\\Chuncks\\'..v..'.lua', game:HttpGet(chunkLink..v..'.lua')) end
+        for i,v in pairs(modules) do writefile('pngLibrary\\Modules\\'..v..'.lua', game:HttpGet(moduleLink..v..'.lua')) end
+        local initScript = game:HttpGet(libraryLink.."init.lua")
+        --Replacing library requires
+        local replaces = {
+            ["local chunks = script.Chunks"] = "",
+            ["local modules = script.Modules"] = "",
+            ["require%(modules.Deflate%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\Deflate.lua'))()",
+            ["require%(modules.Unfilter%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\Unfilter.lua'))()",
+            ["require%(modules.BinaryReader%)"] = "loadstring(readfile('pngLibrary\\\\Modules\\\\BinaryReader.lua'))()",
+            ["local handler = "]="local handler = loadstring(readfile('".."pngLibrary\\\\Chuncks\\\\".."'..chunkType..'.lua'))() --",
+            ["handler = require%(handler%)"]=''
+        }
+        for i,v in pairs(replaces) do 
+        if not string.find(initScript,i) then warn(i) end
+            initScript = (string.gsub(initScript,i,v))
+        end
+        writefile("pngLibrary\\main.lua",initScript)
     end
-    writefile("pngLibrary\\main.lua",initScript)
-end
-if not isfolder('pngLibrary') then getPNGLibrary() end 
-task.wait()
-local pngLib = loadstring(readfile("pngLibrary\\main.lua"))() 
-local response = game:HttpGetAsync(thumbnail, true) -- Fetch the binary data
-local pngFile = pngLib.new(response)
-local options = { Size = Vector2.new(pngFile.Width,pngFile.Height) }
-local editableImage = assetService:CreateEditableImage(options)
-local pixelsBuffer = editableImage:ReadPixelsBuffer(Vector2.zero, editableImage.Size)
-for y = 1, editableImage.Size.Y do
-    for x = 1, editableImage.Size.X do
-        local pixelIndex = ((y - 1) * editableImage.Size.X + (x - 1)) * 4
-        local color, alpha = pngFile:GetPixel(x, y)
-        buffer.writeu8(pixelsBuffer, pixelIndex, color.R * 255)
-        buffer.writeu8(pixelsBuffer, pixelIndex + 1, color.G * 255)
-        buffer.writeu8(pixelsBuffer, pixelIndex + 2, color.B * 255)
-        buffer.writeu8(pixelsBuffer, pixelIndex + 3, alpha)
+    if not isfolder('pngLibrary') then getPNGLibrary() end 
+    task.wait()
+    local pngLib = loadstring(readfile("pngLibrary\\main.lua"))() 
+    local response = game:HttpGetAsync(thumbnail, true) -- Fetch the binary data
+    local pngFile = pngLib.new(response)
+    local options = { Size = Vector2.new(pngFile.Width,pngFile.Height) }
+    local editableImage = assetService:CreateEditableImage(options)
+    local pixelsBuffer = editableImage:ReadPixelsBuffer(Vector2.zero, editableImage.Size)
+    for y = 1, editableImage.Size.Y do
+        for x = 1, editableImage.Size.X do
+            local pixelIndex = ((y - 1) * editableImage.Size.X + (x - 1)) * 4
+            local color, alpha = pngFile:GetPixel(x, y)
+            buffer.writeu8(pixelsBuffer, pixelIndex, color.R * 255)
+            buffer.writeu8(pixelsBuffer, pixelIndex + 1, color.G * 255)
+            buffer.writeu8(pixelsBuffer, pixelIndex + 2, color.B * 255)
+            buffer.writeu8(pixelsBuffer, pixelIndex + 3, alpha)
+        end
     end
-end
-editableImage:WritePixelsBuffer(Vector2.zero, editableImage.Size, pixelsBuffer)
-gameImage.ImageContent = Content.fromObject(editableImage)
-end
+    editableImage:WritePixelsBuffer(Vector2.zero, editableImage.Size, pixelsBuffer)
+    gameImage.ImageContent = Content.fromObject(editableImage)
+end)
+
 --#endregion 
 --#region UI functions 
 closeButton.MouseButton1Click:Connect(function()levelUpLoader:Destroy() end) 
