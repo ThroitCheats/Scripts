@@ -1,4 +1,3 @@
---loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()
 local httpService = game:GetService("HttpService")
 local assetService = game:GetService("AssetService")
 local placeId = game.PlaceId
@@ -23,7 +22,7 @@ local function loadTrident()
     end
 end
 local function loadRivals()
-    local teleportScript = [[script_key = "]]..getgenv().script_key..[["; loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()]]
+    local teleportScript = [[task.wait(3);script_key = "]]..getgenv().script_key..[["; loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()]]
     getgenv().firstRun = true
     script_key = getgenv().script_key
     loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()
