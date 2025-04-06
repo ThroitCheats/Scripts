@@ -5,6 +5,7 @@ local placeId = game.PlaceId
 local universeId = httpService:JSONDecode(game:HttpGet('https://apis.roblox.com/universes/v1/places/'..tostring(placeId)..'/universe')).universeId
 local thumbnail = httpService:JSONDecode(game:HttpGet('https://thumbnails.roblox.com/v1/games/icons?universeIds='..tostring(universeId)..'&size=150x150&format=Png&isCircular=false')).data[1].imageUrl
 local levelUpLoader = Instance.new("ScreenGui")
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport) -- Straight from inf yield tbh
 local function loadTrident()
     local fastflag = getfflag and getfflag('DebugRunParallelLuaOnMainThread');
     local transfer = [[getgenv().script_key = "]]..getgenv().script_key..'"\n'
@@ -26,7 +27,6 @@ local function loadRivals()
     script_key = getgenv().script_key
     loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bcf862d64d2cf64f3307ccac51a79572.lua"))()
     levelUpLoader:Destroy()
-    warn(teleportScript)
     queueteleport(teleportScript)
 end
 
