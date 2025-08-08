@@ -169,12 +169,14 @@ local function loadTrident()
             loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b0de7c4d81201b8837309655e4de6db7.lua"))()
         ]])
         repeat wait(); until checkLoaded() 
+        wait(1)
         levelUpLoader:Destroy()
     elseif tostring(string.lower(fastflag or "false")) == "true" then 
 
         script_key = getgenv().script_key
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b0de7c4d81201b8837309655e4de6db7.lua"))()
         repeat wait(); until checkLoaded() 
+        wait(1)
         levelUpLoader:Destroy()
     end
 end
@@ -218,3 +220,4 @@ checkBtn.MouseButton1Click:connect(function()
         checking = false
     end
 end)
+
