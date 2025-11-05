@@ -137,7 +137,8 @@ end
 
 --[[ Setup ]]--
 local rainbowSpeed = 15
-game:GetService("RunService").Heartbeat:Connect(function()
+local heartbeatConnection;
+heartbeatConnection = game:GetService("RunService").Heartbeat:Connect(function()
     local hue = tick() % rainbowSpeed / rainbowSpeed
     for i, v in next, library.items do
         local flag = library.flags[v.flag]
@@ -2995,10 +2996,20 @@ function library:addsettings()
     uiSettings:addslider({ min=1,max=15, title = "Rainbow Speed", flag = "rainbowSpeed", suffix = "", callback = function(x)rainbowSpeed = 16-x end })
     return settings
 end
-uis.InputBegan:Connect(function(input, gameProcessed)
-	if input.KeyCode.Name == "RightShift" then 
-        library.gui.main.Visible = not library.gui.main.Visible
+local uisConnection;
+uisConnection = uis.InputBegan:Connect(function(input, gameProcessed)
+	if input.KeyCode.Name == "RightShift" then
+		library.gui.main.Visible = not library.gui.main.Visible
 	end
-end)  
+end)
+ 
+function library.Unload()
+    uisConnection:Disconnect()
+    heartbeatConnection:Disconnect()
+    uisConnection = nil
+    heartbeatConnection = nil
+    task.wait()
+    game.CoreGui.LevelUpUi:Destroy()
+end
 
 return library
